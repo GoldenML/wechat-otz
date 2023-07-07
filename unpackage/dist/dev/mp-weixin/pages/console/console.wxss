@@ -1,0 +1,16 @@
+/* 水平间距 */
+/* 水平间距 */
+.console {
+  position: fixed;
+  bottom: 40px;
+  height: "60px";
+  display: flex;
+  width: 100%;
+}
+.console-item {
+  text-align: center;
+  width: 33%;
+}
+.console-item__title {
+  font-size: 12px;
+}
