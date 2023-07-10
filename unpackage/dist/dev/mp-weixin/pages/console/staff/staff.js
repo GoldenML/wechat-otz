@@ -11,31 +11,26 @@ if (!Math) {
   (_easycom_uni_list_chat + _easycom_uni_list)();
 }
 const _sfc_main = {
-  __name: "chat",
+  __name: "staff",
   setup(__props) {
     const {
       proxy
     } = common_vendor.getCurrentInstance();
-    const onClick = (username) => {
-      proxy.$store.commit("updateOperateUsername", username);
-    };
+    common_vendor.onMounted(() => {
+      console.log(proxy.$store.state.friendInfos);
+    });
     return (_ctx, _cache) => {
       return {
-        a: common_vendor.f(common_vendor.unref(proxy).$store.state.msgs, (value, key, i0) => {
+        a: common_vendor.f(common_vendor.unref(proxy).$store.state.friendInfos, (item, index, i0) => {
           return {
-            a: key,
-            b: common_vendor.o(($event) => onClick(value.username), key),
-            c: "93cc3600-1-" + i0 + ",93cc3600-0",
-            d: common_vendor.p({
-              to: "/pages/console/chat-item/chat-item",
+            a: index,
+            b: "43efc502-1-" + i0 + ",43efc502-0",
+            c: common_vendor.p({
               ["avatar-circle"]: true,
-              title: value.nickname,
-              avatar: value.avatar,
-              note: value.lastMsg,
+              title: item.nickname,
+              avatar: item.avatar,
               showSwitch: true,
-              clickable: true,
-              link: "navigateTo",
-              time: value.lastTime
+              clickable: true
             })
           };
         }),
@@ -46,5 +41,5 @@ const _sfc_main = {
     };
   }
 };
-const Component = /* @__PURE__ */ common_vendor._export_sfc(_sfc_main, [["__file", "D:/workspace/wechat-otz/pages/console/chat/chat.vue"]]);
+const Component = /* @__PURE__ */ common_vendor._export_sfc(_sfc_main, [["__file", "D:/workspace/wechat-otz/pages/console/staff/staff.vue"]]);
 wx.createComponent(Component);

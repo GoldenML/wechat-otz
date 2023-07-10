@@ -1,0 +1,111 @@
+/* 水平间距 */
+/* 水平间距 */
+.chat-item {
+  height: 100vh;
+  background-color: whitesmoke;
+}
+.chat-content {
+  overflow-y: auto;
+  background-color: whitesmoke;
+  height: calc(100vh - 100px);
+}
+.chat-content-left {
+  margin-top: 10px;
+  margin-left: 30px;
+  padding-bottom: 10px;
+}
+.chat-content-left__img {
+  text-align: left;
+  display: inline-block;
+  line-height: 32px;
+  min-height: 32px;
+  margin-left: 5px;
+  padding: 0 10px;
+  border-radius: 5px;
+  font-size: 14px;
+  white-space: pre-wrap;
+}
+.chat-content-left__box {
+  max-width: 500px;
+  text-align: left;
+  display: inline-block;
+  line-height: 32px;
+  min-height: 32px;
+  background-color: white;
+  margin-left: 5px;
+  padding: 0 10px;
+  border-radius: 5px;
+  font-size: 14px;
+  white-space: pre-wrap;
+}
+.chat-content-right {
+  text-align: right;
+  margin-top: 10px;
+  margin-right: 30px;
+  padding-bottom: 10px;
+}
+.chat-content-right__img {
+  text-align: left;
+  display: inline-block;
+  line-height: 32px;
+  min-height: 32px;
+  margin-right: 5px;
+  padding: 0 10px;
+  border-radius: 5px;
+  font-size: 14px;
+  white-space: pre-wrap;
+}
+.chat-content-right__box {
+  max-width: 500px;
+  text-align: left;
+  display: inline-block;
+  line-height: 32px;
+  min-height: 32px;
+  margin-right: 5px;
+  background-color: #95ec69;
+  padding: 0 10px;
+  border-radius: 5px;
+  font-size: 14px;
+  white-space: pre-wrap;
+}
+.chat-input {
+  border-top: 1px solid lightgray;
+  background-color: whitesmoke;
+  position: fixed;
+  bottom: 0;
+  padding-top: 10px;
+  padding-bottom: 40px;
+}
+.box-bg {
+  background-color: #F5F5F5;
+  padding: 5px 0;
+}
+.city {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-start;
+  margin-left: 4px;
+}
+.input-view {
+  display: flex;
+  flex-direction: row;
+  flex: 1;
+  background-color: #f8f8f8;
+  height: 30px;
+  border-radius: 15px;
+  padding: 0 15px;
+  flex-wrap: nowrap;
+  margin: 7px 0;
+  line-height: 30px;
+}
+.input-uni-icon {
+  line-height: 30px;
+}
+.nav-bar-input {
+  height: 30px;
+  line-height: 30px;
+  padding: 0 5px;
+  font-size: 12px;
+  background-color: #f8f8f8;
+}

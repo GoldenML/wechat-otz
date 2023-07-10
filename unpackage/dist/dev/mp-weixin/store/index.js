@@ -1,21 +1,24 @@
 "use strict";
 const common_vendor = require("../common/vendor.js");
 const Store = common_vendor.createStore({
-  state: {
-    friendInfos: [],
-    msgs: {},
-    userInfo: {},
-    operateUsername: "",
-    addHistory: [],
-    sequence: 0,
-    messages: {},
-    lookUserInfo: {},
-    groupInfos: [],
-    groupMember: {},
-    chatBadge: false,
-    contactBadge: false,
-    badges: {},
-    cacheUser: {}
+  state() {
+    return common_vendor.reactive({
+      friendInfos: [],
+      msgs: {},
+      userInfo: {},
+      operateUsername: "",
+      addHistory: [],
+      sequence: 0,
+      messages: {},
+      lookUserInfo: {},
+      groupInfos: [],
+      groupMember: {},
+      chatBadge: false,
+      contactBadge: false,
+      badges: {},
+      cacheUser: {},
+      cookie: ""
+    });
   },
   mutations: {
     updateFriendInfos(state, friendInfos) {
@@ -59,6 +62,9 @@ const Store = common_vendor.createStore({
     },
     updateCacheUser(state, cacheUser) {
       state.cacheUser = cacheUser;
+    },
+    updateCookie(state, cookie) {
+      state.cookie = cookie;
     }
   },
   actions: {},

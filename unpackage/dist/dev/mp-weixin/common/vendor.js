@@ -7081,11 +7081,6 @@ const createSubpackageApp = initCreateSubpackageApp();
  * @license MIT
  */
 var storeKey = "store";
-function useStore(key) {
-  if (key === void 0)
-    key = null;
-  return inject(key !== null ? key : storeKey);
-}
 function forEachValue(obj, fn) {
   Object.keys(obj).forEach(function(key) {
     return fn(obj[key], key);
@@ -7767,10 +7762,11 @@ const pages = [
     }
   },
   {
-    path: "pages/console/chat/chat",
+    path: "pages/console/chat-item/chat-item",
     style: {
       navigationBarTitleText: "",
-      enablePullDownRefresh: false
+      enablePullDownRefresh: false,
+      "app-plus": {}
     }
   }
 ];
@@ -10299,6 +10295,7 @@ let Ns = new class {
 var Ds = Ns;
 exports.Ds = Ds;
 exports._export_sfc = _export_sfc;
+exports.computed = computed;
 exports.createSSRApp = createSSRApp;
 exports.createStore = createStore;
 exports.e = e;
@@ -10315,5 +10312,5 @@ exports.resolveComponent = resolveComponent;
 exports.s = s$1;
 exports.sr = sr;
 exports.t = t$1;
-exports.useStore = useStore;
+exports.unref = unref;
 exports.wx$1 = wx$1;

@@ -3,6 +3,7 @@
   "enablePullDownRefresh": false,
   "usingComponents": {
     "uni-icons": "../../uni_modules/uni-icons/components/uni-icons/uni-icons",
-    "chat": "./chat/chat"
+    "chat-module": "./chat/chat",
+    "staff-module": "./staff/staff"
   }
 }

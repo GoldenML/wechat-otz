@@ -1,0 +1,1 @@
+<view><view style="line-height:20px;font-size:14px"> 全部好友 </view><uni-list wx:if="{{b}}" u-s="{{['d']}}" u-i="43efc502-0" bind:__l="__l" u-p="{{b}}"><uni-list-chat wx:for="{{a}}" wx:for-item="item" wx:key="a" u-i="{{item.b}}" bind:__l="__l" u-p="{{item.c}}"></uni-list-chat></uni-list></view>

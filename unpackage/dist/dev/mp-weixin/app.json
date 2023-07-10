@@ -2,7 +2,7 @@
   "pages": [
     "pages/login/login",
     "pages/console/console",
-    "pages/console/chat/chat"
+    "pages/console/chat-item/chat-item"
   ],
   "window": {
     "navigationBarTextStyle": "black",
