@@ -21,10 +21,15 @@ const _sfc_main = {
       proxy
     } = common_vendor.getCurrentInstance();
     const currentItem = common_vendor.ref("chat");
+    const height = common_vendor.ref(0);
     const switchItem = (name) => {
       currentItem.value = name;
     };
     common_vendor.onMounted(() => {
+      let query = common_vendor.wx$1.createSelectorQuery();
+      query.select(".console").boundingClientRect((res) => {
+        height.value = res.top;
+      }).exec();
       Promise.all([
         utils_request.post(common_ApiPath.otz.USER_LOGIN_STATUS, {}).then((res) => {
           proxy.$store.commit("updateUserInfo", res.user_info);
@@ -163,7 +168,7 @@ const _sfc_main = {
                     avatar: groupInfo.group_avatar,
                     lastUsername: from_username,
                     lastMsg: msg_type === 1 ? text_msg.text : msg_type === 2 ? "[图片]" : "",
-                    username: group_id,
+                    username: to_username,
                     msgList: from_type === 4 ? [{
                       ...e,
                       isSystemMsg: true
@@ -221,6 +226,7 @@ const _sfc_main = {
               });
             }
           });
+          console.log("message", obj);
           proxy.$store.commit("updateMsgs", obj);
           getUserMsg();
         }
@@ -232,48 +238,49 @@ const _sfc_main = {
       }, currentItem.value === "chat" ? {} : {}, {
         b: currentItem.value === "staff"
       }, currentItem.value === "staff" ? {} : {}, {
-        c: currentItem.value !== "chat"
+        c: height.value + "px",
+        d: currentItem.value !== "chat"
       }, currentItem.value !== "chat" ? {
-        d: common_vendor.p({
+        e: common_vendor.p({
           type: "chatbubble",
           size: 30
         })
       } : {
-        e: common_vendor.p({
+        f: common_vendor.p({
           type: "chatbubble-filled",
           size: 30
         })
       }, {
-        f: common_vendor.o(($event) => switchItem("chat")),
-        g: currentItem.value !== "staff"
+        g: common_vendor.o(($event) => switchItem("chat")),
+        h: currentItem.value !== "staff"
       }, currentItem.value !== "staff" ? {
-        h: common_vendor.p({
+        i: common_vendor.p({
           type: "staff",
           size: 30
         })
       } : {
-        i: common_vendor.p({
+        j: common_vendor.p({
           type: "staff-filled",
           size: 30
         })
       }, {
-        j: common_vendor.o(($event) => switchItem("staff")),
-        k: currentItem.value !== "my"
+        k: common_vendor.o(($event) => switchItem("staff")),
+        l: currentItem.value !== "my"
       }, currentItem.value !== "my" ? {
-        l: common_vendor.p({
+        m: common_vendor.p({
           type: "person",
           size: 30
         })
       } : {
-        m: common_vendor.p({
+        n: common_vendor.p({
           type: "person-filled",
           size: 30
         })
       }, {
-        n: common_vendor.o(($event) => switchItem("my"))
+        o: common_vendor.o(($event) => switchItem("my"))
       });
     };
   }
 };
-const MiniProgramPage = /* @__PURE__ */ common_vendor._export_sfc(_sfc_main, [["__file", "D:/workspace/wechat-otz/pages/console/console.vue"]]);
+const MiniProgramPage = /* @__PURE__ */ common_vendor._export_sfc(_sfc_main, [["__file", "D:/otz/wechat-otz/pages/console/console.vue"]]);
 wx.createPage(MiniProgramPage);

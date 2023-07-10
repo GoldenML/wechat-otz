@@ -86,7 +86,7 @@ const _sfc_main = {
         i: common_vendor.p({
           name: "code"
         }),
-        j: common_vendor.sr(form, "5644880c-0", {
+        j: common_vendor.sr(form, "aa8250a8-0", {
           "k": "form"
         }),
         k: common_vendor.p({
@@ -97,5 +97,5 @@ const _sfc_main = {
     };
   }
 };
-const MiniProgramPage = /* @__PURE__ */ common_vendor._export_sfc(_sfc_main, [["__file", "D:/workspace/wechat-otz/pages/login/login.vue"]]);
+const MiniProgramPage = /* @__PURE__ */ common_vendor._export_sfc(_sfc_main, [["__file", "D:/otz/wechat-otz/pages/login/login.vue"]]);
 wx.createPage(MiniProgramPage);

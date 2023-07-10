@@ -1,8 +1,8 @@
 <template>
-	<view>
+	<scroll-view :style="{height: height + 'px'}" scroll-y="true">
 		<ChatModule v-if="currentItem === 'chat'" />
 		<StaffModule v-if="currentItem === 'staff'" />
-	</view>
+	</scroll-view>
 	<view class="console">
 		<view @click="switchItem('chat')" id="chat" class="console-item">
 			<uni-icons v-if="currentItem !== 'chat'" type="chatbubble" :size="30"></uni-icons>
@@ -45,10 +45,16 @@
 	} = getCurrentInstance()
 	const currentItem = ref('chat')
 
+const height = ref(0)
+
 	const switchItem = (name) => {
 		currentItem.value = name
 	}
 	onMounted(() => {
+		let query = wx.createSelectorQuery();
+		query.select('.console').boundingClientRect(res => {
+			height.value = res.top
+		}).exec();
 		Promise.all([
 			post(ApiPath.USER_LOGIN_STATUS, {}).then(res => {
 				proxy.$store.commit("updateUserInfo", res.user_info)
@@ -145,7 +151,7 @@
 						client_sequence,
 						sequence,
 						group_id,
-						timestamp
+						timestamp,
 					} = e
 					e.formatTime = formatDate(timestamp)
 					if (from_type === 1 && to_type === 1) {
@@ -189,7 +195,7 @@
 									avatar: groupInfo.group_avatar,
 									lastUsername: from_username,
 									lastMsg: msg_type === 1 ? text_msg.text : msg_type === 2 ? '[图片]' : '',
-									username: group_id,
+									username: to_username,
 									msgList: from_type === 4 ? [{
 										...e,
 										isSystemMsg: true,
@@ -246,6 +252,7 @@
 						})
 					}
 				})
+				console.log('message', obj);
 				proxy.$store.commit('updateMsgs', obj)
 				getUserMsg()
 			}

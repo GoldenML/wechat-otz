@@ -1,1 +1,1 @@
-<view><uni-list wx:if="{{b}}" u-s="{{['d']}}" u-i="93cc3600-0" bind:__l="__l" u-p="{{b}}"><uni-list-chat wx:for="{{a}}" wx:for-item="value" wx:key="a" bindclick="{{value.b}}" u-i="{{value.c}}" bind:__l="__l" u-p="{{value.d}}"></uni-list-chat></uni-list></view>
+<view><uni-list wx:if="{{b}}" u-s="{{['d']}}" u-i="6341fca0-0" bind:__l="__l" u-p="{{b}}"><uni-list-chat wx:for="{{a}}" wx:for-item="value" wx:key="a" bindclick="{{value.b}}" u-i="{{value.c}}" bind:__l="__l" u-p="{{value.d}}"></uni-list-chat></uni-list></view>

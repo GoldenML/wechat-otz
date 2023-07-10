@@ -7765,8 +7765,7 @@ const pages = [
     path: "pages/console/chat-item/chat-item",
     style: {
       navigationBarTitleText: "",
-      enablePullDownRefresh: false,
-      "app-plus": {}
+      enablePullDownRefresh: false
     }
   }
 ];

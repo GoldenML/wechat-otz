@@ -24,7 +24,7 @@ const _sfc_main = {
         a: common_vendor.f(common_vendor.unref(proxy).$store.state.friendInfos, (item, index, i0) => {
           return {
             a: index,
-            b: "43efc502-1-" + i0 + ",43efc502-0",
+            b: "477074a2-1-" + i0 + ",477074a2-0",
             c: common_vendor.p({
               ["avatar-circle"]: true,
               title: item.nickname,
@@ -41,5 +41,5 @@ const _sfc_main = {
     };
   }
 };
-const Component = /* @__PURE__ */ common_vendor._export_sfc(_sfc_main, [["__file", "D:/workspace/wechat-otz/pages/console/staff/staff.vue"]]);
+const Component = /* @__PURE__ */ common_vendor._export_sfc(_sfc_main, [["__file", "D:/otz/wechat-otz/pages/console/staff/staff.vue"]]);
 wx.createComponent(Component);

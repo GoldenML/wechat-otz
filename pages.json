@@ -27,9 +27,9 @@
 				"enablePullDownRefresh": false,
 				// "navigationStyle": "custom",
 				//App端的配置
-				"app-plus": {
+				// "app-plus": {
 					// "softinputMode": "adjustResize"
-				}
+				// }
 			}
 
 		}
