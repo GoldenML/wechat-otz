@@ -112,7 +112,7 @@ const _sfc_main = {
         const tempBadges = {};
         Object.keys(msgs).forEach((v) => {
           if (newMessage.includes(v) && operateUsername !== v) {
-            tempBadges[v] = badges[v] ? badges[v] === 99 ? "99+" : ++badges : 1;
+            tempBadges[v] = badges[v] ? badges[v] === 99 ? "99+" : ++badges[v] : 1;
           }
         });
         proxy.$store.commit("updateBadges", Object.assign(badges, tempBadges));
