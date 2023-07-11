@@ -4,9 +4,10 @@
 			<uni-nav-bar dark :fixed="true" color="#000000" shadow background-color="rgb(245, 245, 245)" left-icon="left"
 				left-text="返回" :border="false" :height="60" :title="msgs[operateUsername]?.nickname" @clickLeft="back" />
 		</view>
-		<scroll-view class="chat-content" :style="{height: height + 'px'}" scroll-y="true" :scroll-top="scrollTop">
+		<scroll-view class="chat-content" :scroll-into-view="toView" :style="{height: height + 'px'}" scroll-y="true">
+			<view id="scroll-top"></view>
 			<view v-if="msgs[operateUsername]?.type === 1">
-				<view v-for="msg in msgs[operateUsername].msgList" :key="msg.sequence">
+				<view v-for="msg in msgs[operateUsername].msgList" :key="msg.sequence" :id="msg.sequence">
 					<view v-if="msg.from_username === msgs[operateUsername].username">
 						<view style="text-align: center; font-size: 12px;color: rgb(168,166,166); padding-top: 5px;">
 							{{ msg.formatTime }}
@@ -23,12 +24,15 @@
 							<view v-else class="chat-content-left__box">
 								{{ msg.text_msg?.text }}
 							</view>
+							<uni-icons v-if="msg.wait" type="spinner-cycle" size="20"></uni-icons>
 						</view>
 					</view>
 					<view v-else>
 						<view style="text-align: center; font-size: 12px;color: rgb(168,166,166);padding-top: 5px;">
-							{{ msg.formatTime }}</view>
+							{{ msg.formatTime }}
+						</view>
 						<view class="chat-content-right">
+							<uni-icons v-if="msg.wait" type="spinner-cycle" size="20"></uni-icons>
 							<view v-if="msg.msg_type === 2" class="chat-content-right__img">
 								<image mode="widthFix" style="width: 150px;" :src="msg.image_msg.image_url" alt=""></image>
 							</view>
@@ -46,7 +50,8 @@
 					<view v-if="msg.isSystemMsg">
 						<view style="text-align: center; font-size: 12px;color: rgb(198, 173, 173)">
 							<view style="text-align: center; font-size: 12px;color: rgb(168,166,166);padding-top: 5px;">
-								{{ msg.formatTime }}</view>
+								{{ msg.formatTime }}
+							</view>
 							{{ msg.text_msg?.text }}
 						</view>
 					</view>
@@ -54,19 +59,20 @@
 						<view style="text-align: center; font-size: 12px;color: rgb(168,166,166);padding-top: 5px;">
 							{{ msg.formatTime }}
 						</view>
-						<div class="chat-content-right">
+						<view class="chat-content-right">
+							<uni-icons v-if="msg.wait" type="spinner-cycle" size="20"></uni-icons>
+							<view v-if="msg.msg_type === 2" class="chat-content-right__img">
+								<image mode="widthFix" style="width: 150px" :src="msg.image_msg.image_url" alt=""></image>
+							</view>
+							<view v-else class="chat-content-right__box">
+								{{ msg.text_msg?.text }}
+							</view>
+							
 							<image alt=""
 								style="float:right;vertical-align: middle; cursor: pointer; width: 32px; height: 32px; border-radius: 16px;"
 								:src="userInfo.avatar" :width="32" :height="32" @click.stop="handleShowInfo($event, false)">
 							</image>
-							<div v-if="msg.msg_type === 2" class="chat-content-right__img">
-								<image mode="widthFix" style="width: 150px" :src="msg.image_msg.image_url" alt=""></image>
-							</div>
-							<div v-else class="chat-content-right__box">
-								{{ msg.text_msg?.text }}
-							</div>
-
-						</div>
+						</view>
 					</view>
 					<view v-else>
 						<view style="text-align: center; font-size: 12px;color: rgb(168,166,166)"> {{ msg.formatTime }}</view>
@@ -83,10 +89,12 @@
 							<view v-else class="chat-content-left__box">
 								{{ msg.text_msg?.text }}
 							</view>
+							<uni-icons v-if="msg.wait" type="spinner-cycle" size="20"></uni-icons>
 						</view>
 					</view>
 				</view>
 			</view>
+			<view id="scroll-bottom"></view>
 		</scroll-view>
 		<view class="message-bottom"></view>
 		<!-- <button @click="testClick">测试</button> -->
@@ -95,7 +103,7 @@
 				<uni-easyinput autoHeight v-model="message"></uni-easyinput>
 			</view>
 			<view style="width: 20%;display: inline-block;vertical-align: middle;margin-left: 5px;">
-				<button @click="sendMessage" style="line-height: 36px; font-size: 14px;">发送</button>
+				<button :disabled="!message" @click="sendMessage" style="line-height: 36px; font-size: 14px;">发送</button>
 			</view>
 		</view>
 	</view>
@@ -105,10 +113,16 @@
 	import {
 		computed,
 		getCurrentInstance,
+		inject,
 		onMounted,
 		ref
 	} from "vue";
 	import loginVue from "../../login/login.vue";
+	import {
+		post
+	} from '@/utils/request.js'
+	import ApiPath from '@/common/ApiPath.js'
+
 	const {
 		proxy
 	} = getCurrentInstance()
@@ -124,6 +138,9 @@
 	const userInfo = computed(() => proxy.$store.state.userInfo)
 	const groupMember = computed(() => proxy.$store.state.groupMember)
 	const cacheUser = computed(() => proxy.$store.state.cacheUser)
+
+	const toView = ref('')
+	const endId = ref('')
 	const height = ref(0)
 
 	const footer = ref(null)
@@ -144,26 +161,76 @@
 			}).exec();
 			query.select('.chat-input').boundingClientRect(res => {
 				height.value = Number(Number(res.top - containerHeight.value).toFixed(0))
-				scrollTop.value = res.top
-				console.log(scrollTop.value);
 			}).exec();
-			query.select('.chat-content').boundingClientRect(res => {
-				console.log(res);
-			}).exec();
+			scrollBottom()
+
+			// let view_id = 'view_id_' + parseInt(Math.random() * 1000000)
+			// toView.value = ''
+			// endId.value = view_id
+			// toView.value = view_id
 		})
 	})
-	const scrollBottom = () => {
-		// query.select('.chat-input').boundingClientRect(res => {
-		// 	scrollTop.value = res.top
-		// 	console.log(scrollTop.value);
-		// }).exec();
-	}
 	const handleShowInfo = () => {
 
 	}
-
+	const scrollBottom = () => {
+		toView.value = ''
+		proxy.$nextTick(() => {
+			toView.value = 'scroll-bottom'
+		})
+	}
+	const formatDate = (value, type) => {
+		var date = new Date(Number(value));
+		var month = date.getMonth() + 1;
+		var hours = date.getHours();
+		if (hours < 10)
+			hours = "0" + hours;
+		var minutes = date.getMinutes();
+		if (minutes < 10)
+			minutes = "0" + minutes;
+		return hours + ":" + minutes
+	}
+	const globalFunc = inject('globalFunc')
 	const sendMessage = () => {
+		const msg = message.value
+		console.log(operateUsername.value);
+		const client_sequence = userInfo.value.username + new Date().getTime()
+		const data = {
+			msg_type: 1,
+			from_type: 1,
+			to_type: msgs.value[operateUsername.value].type,
+			to_username: operateUsername.value,
+			text_msg: {
+				text: message.value
+			},
+			from_username: userInfo.value.username,
+			wait: true,
+			client_sequence,
+			formatTime: formatDate(new Date().getTime())
+		}
+		msgs.value[operateUsername.value].lastUsername = userInfo.value.username
+		msgs.value[operateUsername.value].lastMsg = message.value
+		msgs.value[operateUsername.value].msgList.push(data)
+		message.value = ''
+		scrollBottom()
+		post(ApiPath.USER_SEND_MSG, {
+			msg: data
+		}, {}, {
+			hideToast: true
+		}).then(res => {
+			globalFunc.getUserMsg()
+			// wx.showToast({
 
+			// })
+			// if (res.code === 0) {
+			// 	globalFunc.getUserMsg()
+			// } else {
+			// 	proxy.$message({
+			// 		type: 'error',
+			// 		message: res.msg
+			// 	})
+			// }
+		})
 	}
 </script>
 

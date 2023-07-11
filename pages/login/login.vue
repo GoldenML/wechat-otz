@@ -9,7 +9,7 @@
 			</uni-forms-item>
 			<uni-forms-item name="code">
 				<view style="width: 60%;display: inline-block;vertical-align: middle;">
-					<uni-easyinput v-model="form.code" placeholder="请输入验证码" type="password">
+					<uni-easyinput v-model="form.code" placeholder="请输入验证码" >
 					</uni-easyinput>
 				</view>
 				<view class="get-code">

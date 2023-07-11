@@ -30,6 +30,7 @@
 		computed,
 		getCurrentInstance,
 		onMounted,
+		provide,
 		ref
 	} from "vue"
 	import {
@@ -45,12 +46,13 @@
 	} = getCurrentInstance()
 	const currentItem = ref('chat')
 
-const height = ref(0)
+	const height = ref(0)
 
 	const switchItem = (name) => {
 		currentItem.value = name
 	}
 	onMounted(() => {
+		connectWs()
 		let query = wx.createSelectorQuery();
 		query.select('.console').boundingClientRect(res => {
 			height.value = res.top
@@ -71,7 +73,9 @@ const height = ref(0)
 			getUserMsg()
 		})
 	})
-
+	provide('globalFunc', {
+	  getUserMsg: () => getUserMsg(),
+	})
 	const getAllGroupMember = (groups) => {
 		const groupMember = {}
 		Promise.all(groups.map(e => {
@@ -119,6 +123,8 @@ const height = ref(0)
 		console.log(222, userInfo, friendInfos);
 		const res = await post(ApiPath.USER_GET_MSGS, {
 			sequence
+		}, {}, {
+			hideToast: true
 		})
 		if (res.code === 0) {
 			const newMessage = res.msgs.map(e => {
@@ -133,10 +139,11 @@ const height = ref(0)
 			const tempBadges = {}
 			Object.keys(msgs).forEach(v => {
 				if (newMessage.includes(v) && operateUsername !== v) {
-					tempBadges[v] = true
+					tempBadges[v] = badges[v] ? badges[v] === 99 ? '99+' : ++badges : 1
 				}
 			})
-			Object.assign(badges, tempBadges)
+			proxy.$store.commit('updateBadges', Object.assign(badges, tempBadges))
+			
 			if (res.msgs?.length > 0) {
 				proxy.$store.commit("updateSequence", Number(res.msgs[res.msgs.length - 1].sequence))
 				const obj = proxy.$deepClone(msgs) || {}
@@ -230,7 +237,7 @@ const height = ref(0)
 					}
 				})
 				const newArr = arr.sort((v1, v2) => {
-					return Number(v2[Object.keys(v2)[0]].lastTime) - Number(v1[Object.keys(v1)[0]].lastTime)
+					return Number(v2[Object.keys(v2)[0]].sequence) - Number(v1[Object.keys(v1)[0]].sequence)
 				})
 				const newObj = {}
 				newArr.forEach(e => {
@@ -254,10 +261,110 @@ const height = ref(0)
 				})
 				console.log('message', obj);
 				proxy.$store.commit('updateMsgs', obj)
-				getUserMsg()
+				if(res.msgs?.length > 100){
+					getUserMsg()
+				}
 			}
 
 		}
+	}
+	const connectWs = () => {
+	  let lockReconnect = false
+	  let tt
+		let routes = getCurrentPages(); 
+		let curRoute = routes[routes.length - 1].route
+		console.log(222, curRoute);
+	  let timer = null
+	  let ws
+	  let wsUrl = 'wss://im.sotz.cc/otz/im/web_proxy/sync_notify'
+	  function createWebSocket() {
+	    try {
+	      ws = wx.connectSocket({
+					url: wsUrl,
+					header: {
+						cookie: wx.getStorageSync('cookie')
+					}
+				})
+	      init()
+	    } catch(e) {
+				console.log(e);
+	      reconnect(wsUrl)
+	    }
+	  }
+	  function init() {
+	    wx.onSocketOpen(() => {
+				console.log('连接成功');
+				//心跳检测重置
+				heartCheck.start()
+			})
+	    wx.onSocketMessage(({ data }) => {
+				console.log(data);
+	      if (data === 'otz_pong') {
+	        heartCheck.start()
+	        return
+	      }
+	
+	      switch (JSON.parse(data).notify_type) {
+	      case 1:
+	        if(curRoute === 'pages/console/console' || curRoute === 'pages/console/chat-item/chat-item') {
+						proxy.$store.commit('updateContactBadge', true)
+	        }
+	        // getAddHistory()
+	        break
+	      case 2:
+	        if(curRoute === 'pages/console/staff/staff') {
+						proxy.$store.commit('updateChatBadge', true)
+	        }
+	        getUserMsg()
+	        break
+	      default:
+	        break
+	      }
+	    })
+	    wx.onSocketClose(() => {
+				console.log('ws已关闭')
+				reconnect(wsUrl)
+			}) 
+	    wx.onSocketError(() => {
+				console.log('ws发生异常')
+				reconnect(wsUrl)
+			})
+	  }
+	  function reconnect(url) {
+	    if(lockReconnect) {
+	      return
+	    }
+	    lockReconnect = true
+	    //没连接上会一直重连，设置延迟避免请求过多
+	    tt && clearTimeout(tt)
+	    tt = setTimeout(function () {
+	      createWebSocket(url)
+	      lockReconnect = false
+	    }, 4000)
+	  }
+	  let heartCheck = {
+	    timeout: 10000,
+	    timeoutObj: null,
+	    serverTimeoutObj: null,
+	    start: function() {
+	      let self = this
+	      console.log('ws ===>', ws)
+	      this.timeoutObj && clearTimeout(this.timeoutObj)
+	      this.serverTimeoutObj && clearTimeout(this.serverTimeoutObj)
+	      this.timeoutObj = setTimeout(function() {
+	        //这里发送一个心跳，后端收到后，返回一个心跳消息，
+	        wx.sendSocketMessage({
+						data: 'otz-ping',
+					})
+	        self.serverTimeoutObj = setTimeout(function() {
+	          wx.closeSocket()
+	        }, self.timeout)
+	      }, this.timeout)
+	    }
+	  }
+	  // const IS_PROD = ['production', 'prod'].includes(process.env.NODE_ENV)
+	  // IS_PROD && createWebSocket()
+		createWebSocket()
 	}
 </script>
 

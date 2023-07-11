@@ -2,8 +2,9 @@
 const common_vendor = require("../common/vendor.js");
 const common_operate = require("../common/operate.js");
 require("../store/index.js");
-const post = (url, data, headers) => {
-  {
+const post = (url, data, headers, other) => {
+  let hideLoading = false;
+  if (!(other == null ? void 0 : other.hideToast) && !hideLoading) {
     common_vendor.index.showLoading({
       title: "加载中..."
     });

@@ -2,9 +2,9 @@ import operate from '../common/operate.js'
 // vuex 的使用  详情参考官网 https://uniapp.dcloud.io/vue-vuex
 import store from '../store/index.js'
 
-export const post = (url, data, headers) => {
+export const post = (url, data, headers, other) => {
 	let hideLoading = false
-	if (!hideLoading) {
+	if (!other?.hideToast && !hideLoading) {
 		uni.showLoading({
 			title: '加载中...'
 		});

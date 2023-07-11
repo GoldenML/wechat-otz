@@ -16,8 +16,11 @@ const _sfc_main = {
     const {
       proxy
     } = common_vendor.getCurrentInstance();
+    const badges = common_vendor.computed(() => proxy.$store.state.badges);
     const onClick = (username) => {
       proxy.$store.commit("updateOperateUsername", username);
+      badges.value[username] = false;
+      proxy.$store.commit("updateBadges", 0);
     };
     return (_ctx, _cache) => {
       return {
@@ -28,13 +31,16 @@ const _sfc_main = {
             c: "6341fca0-1-" + i0 + ",6341fca0-0",
             d: common_vendor.p({
               to: "/pages/console/chat-item/chat-item",
-              ["avatar-circle"]: true,
+              ["avatar-circle"]: false,
               title: value.nickname,
               avatar: value.avatar,
               note: value.lastMsg,
               showSwitch: true,
               clickable: true,
               link: "navigateTo",
+              ["badge-positon"]: "left",
+              ["badge-text"]: common_vendor.unref(badges)[value.username],
+              showBadge: common_vendor.unref(badges)[value.username],
               time: value.lastTime
             })
           };

@@ -74,7 +74,6 @@ const _sfc_main = {
         d: common_vendor.o(($event) => form.code = $event),
         e: common_vendor.p({
           placeholder: "请输入验证码",
-          type: "password",
           modelValue: form.code
         }),
         f: counter.value === 0

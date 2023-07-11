@@ -26,6 +26,7 @@ const _sfc_main = {
       currentItem.value = name;
     };
     common_vendor.onMounted(() => {
+      connectWs();
       let query = common_vendor.wx$1.createSelectorQuery();
       query.select(".console").boundingClientRect((res) => {
         height.value = res.top;
@@ -45,6 +46,9 @@ const _sfc_main = {
         console.log("userInfo===> ");
         getUserMsg();
       });
+    });
+    common_vendor.provide("globalFunc", {
+      getUserMsg: () => getUserMsg()
     });
     const getAllGroupMember = (groups) => {
       const groupMember = {};
@@ -77,7 +81,7 @@ const _sfc_main = {
       }
     };
     const getUserMsg = async () => {
-      var _a;
+      var _a, _b;
       const {
         userInfo,
         groupInfos,
@@ -92,6 +96,8 @@ const _sfc_main = {
       console.log(222, userInfo, friendInfos);
       const res = await utils_request.post(common_ApiPath.otz.USER_GET_MSGS, {
         sequence
+      }, {}, {
+        hideToast: true
       });
       if (res.code === 0) {
         const newMessage = res.msgs.map((e) => {
@@ -106,10 +112,10 @@ const _sfc_main = {
         const tempBadges = {};
         Object.keys(msgs).forEach((v) => {
           if (newMessage.includes(v) && operateUsername !== v) {
-            tempBadges[v] = true;
+            tempBadges[v] = badges[v] ? badges[v] === 99 ? "99+" : ++badges : 1;
           }
         });
-        Object.assign(badges, tempBadges);
+        proxy.$store.commit("updateBadges", Object.assign(badges, tempBadges));
         if (((_a = res.msgs) == null ? void 0 : _a.length) > 0) {
           proxy.$store.commit("updateSequence", Number(res.msgs[res.msgs.length - 1].sequence));
           const obj = proxy.$deepClone(msgs) || {};
@@ -204,7 +210,7 @@ const _sfc_main = {
             };
           });
           const newArr = arr.sort((v1, v2) => {
-            return Number(v2[Object.keys(v2)[0]].lastTime) - Number(v1[Object.keys(v1)[0]].lastTime);
+            return Number(v2[Object.keys(v2)[0]].sequence) - Number(v1[Object.keys(v1)[0]].sequence);
           });
           const newObj = {};
           newArr.forEach((e) => {
@@ -228,9 +234,99 @@ const _sfc_main = {
           });
           console.log("message", obj);
           proxy.$store.commit("updateMsgs", obj);
-          getUserMsg();
+          if (((_b = res.msgs) == null ? void 0 : _b.length) > 100) {
+            getUserMsg();
+          }
         }
       }
+    };
+    const connectWs = () => {
+      let lockReconnect = false;
+      let tt;
+      let routes = getCurrentPages();
+      let curRoute = routes[routes.length - 1].route;
+      console.log(222, curRoute);
+      let ws;
+      let wsUrl = "wss://im.sotz.cc/otz/im/web_proxy/sync_notify";
+      function createWebSocket() {
+        try {
+          ws = common_vendor.wx$1.connectSocket({
+            url: wsUrl,
+            header: {
+              cookie: common_vendor.wx$1.getStorageSync("cookie")
+            }
+          });
+          init();
+        } catch (e) {
+          console.log(e);
+          reconnect();
+        }
+      }
+      function init() {
+        common_vendor.wx$1.onSocketOpen(() => {
+          console.log("连接成功");
+          heartCheck.start();
+        });
+        common_vendor.wx$1.onSocketMessage(({ data }) => {
+          console.log(data);
+          if (data === "otz_pong") {
+            heartCheck.start();
+            return;
+          }
+          switch (JSON.parse(data).notify_type) {
+            case 1:
+              if (curRoute === "pages/console/console" || curRoute === "pages/console/chat-item/chat-item") {
+                proxy.$store.commit("updateContactBadge", true);
+              }
+              break;
+            case 2:
+              if (curRoute === "pages/console/staff/staff") {
+                proxy.$store.commit("updateChatBadge", true);
+              }
+              getUserMsg();
+              break;
+          }
+        });
+        common_vendor.wx$1.onSocketClose(() => {
+          console.log("ws已关闭");
+          reconnect();
+        });
+        common_vendor.wx$1.onSocketError(() => {
+          console.log("ws发生异常");
+          reconnect();
+        });
+      }
+      function reconnect(url) {
+        if (lockReconnect) {
+          return;
+        }
+        lockReconnect = true;
+        tt && clearTimeout(tt);
+        tt = setTimeout(function() {
+          createWebSocket();
+          lockReconnect = false;
+        }, 4e3);
+      }
+      let heartCheck = {
+        timeout: 1e4,
+        timeoutObj: null,
+        serverTimeoutObj: null,
+        start: function() {
+          let self = this;
+          console.log("ws ===>", ws);
+          this.timeoutObj && clearTimeout(this.timeoutObj);
+          this.serverTimeoutObj && clearTimeout(this.serverTimeoutObj);
+          this.timeoutObj = setTimeout(function() {
+            common_vendor.wx$1.sendSocketMessage({
+              data: "otz-ping"
+            });
+            self.serverTimeoutObj = setTimeout(function() {
+              common_vendor.wx$1.closeSocket();
+            }, self.timeout);
+          }, this.timeout);
+        }
+      };
+      createWebSocket();
     };
     return (_ctx, _cache) => {
       return common_vendor.e({
