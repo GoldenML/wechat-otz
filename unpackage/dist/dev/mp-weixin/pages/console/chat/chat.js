@@ -19,7 +19,9 @@ const _sfc_main = {
     const badges = common_vendor.computed(() => proxy.$store.state.badges);
     const onClick = (username) => {
       proxy.$store.commit("updateOperateUsername", username);
-      proxy.$store.commit("updateBadges", 0);
+      badges.value[username] = 0;
+      console.log(badges);
+      proxy.$store.commit("updateBadges", badges.value);
     };
     return (_ctx, _cache) => {
       return {
