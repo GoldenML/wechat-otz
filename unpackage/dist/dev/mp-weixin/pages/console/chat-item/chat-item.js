@@ -54,6 +54,9 @@ const _sfc_main = {
         scrollBottom();
       });
     });
+    common_vendor.watch(() => msgs.value[operateUsername.value], (value) => {
+      scrollBottom();
+    });
     const handleShowInfo = () => {
     };
     const scrollBottom = () => {

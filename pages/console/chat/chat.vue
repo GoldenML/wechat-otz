@@ -25,7 +25,6 @@
 	
 	const onClick = (username) => {
 		proxy.$store.commit('updateOperateUsername', username)
-		badges.value[username] = false
 		proxy.$store.commit('updateBadges', 0)
 	}
 </script>

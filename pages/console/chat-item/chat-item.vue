@@ -115,7 +115,8 @@
 		getCurrentInstance,
 		inject,
 		onMounted,
-		ref
+		ref,
+		watch
 	} from "vue";
 	import loginVue from "../../login/login.vue";
 	import {
@@ -169,6 +170,9 @@
 			// endId.value = view_id
 			// toView.value = view_id
 		})
+	})
+	watch(() => msgs.value[operateUsername.value], (value) =>{
+		scrollBottom()
 	})
 	const handleShowInfo = () => {
 
@@ -247,7 +251,7 @@
 
 		&-left {
 			margin-top: 10px;
-			margin-left: 30px;
+			margin-left: 20px;
 			padding-bottom: 10px;
 
 			&__img {
@@ -263,7 +267,7 @@
 			}
 
 			&__box {
-				max-width: 500px;
+				max-width: 250px;
 				text-align: left;
 				display: inline-block;
 				line-height: 32px;
@@ -280,7 +284,7 @@
 		&-right {
 			text-align: right;
 			margin-top: 10px;
-			margin-right: 30px;
+			margin-right: 20px;
 			padding-bottom: 10px;
 
 			&__img {
@@ -296,7 +300,7 @@
 			}
 
 			&__box {
-				max-width: 500px;
+				max-width: 250px;
 				text-align: left;
 				display: inline-block;
 				line-height: 32px;
