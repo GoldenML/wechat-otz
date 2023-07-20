@@ -1,1 +1,5 @@
 @import '@/uni_modules/uni-scss/variables.scss';
+@import 'uview-plus/theme.scss';
+.uni-navbar--shadow {
+	box-shadow: 0 1px 0px #ccc !important;
+} 

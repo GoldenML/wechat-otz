@@ -2,9 +2,11 @@
   "pages": [
     "pages/login/login",
     "pages/console/console",
-    "pages/console/chat-item/chat-item"
+    "pages/console/chat-item/chat-item",
+    "pages/console/user-info/user-info"
   ],
   "window": {
+    "navigationStyle": "custom",
     "navigationBarTextStyle": "black",
     "navigationBarTitleText": "uni-app",
     "navigationBarBackgroundColor": "#F8F8F8",

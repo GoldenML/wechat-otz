@@ -15,8 +15,9 @@
 		}, {
 			"path": "pages/console/console",
 			"style": {
-				"navigationBarTitleText": "首页",
+				"navigationBarTitleText": "OTZ",
 				"enablePullDownRefresh": false
+				// "navigationStyle": "custom"
 			}
 
 		},
@@ -33,8 +34,18 @@
 			}
 
 		}
-	],
+        ,{
+            "path" : "pages/console/user-info/user-info",
+            "style" :                                                                                    
+            {
+                "navigationBarTitleText": "",
+                "enablePullDownRefresh": false
+            }
+            
+        }
+    ],
 	"globalStyle": {
+		"navigationStyle": "custom",
 		"navigationBarTextStyle": "black",
 		"navigationBarTitleText": "uni-app",
 		"navigationBarBackgroundColor": "#F8F8F8",

@@ -1,7 +1,6 @@
 // #ifndef VUE3
 import Vue from 'vue'
 import App from './App'
-
 Vue.config.productionTip = false
 App.mpType = 'app'
 
@@ -17,6 +16,8 @@ import Store from './store'
 import {
 	createSSRApp
 } from 'vue'
+import uView from 'uview-plus/index'
+import { createPinia } from 'pinia'
 
 function deepClone(source){
   const target = source.constructor ===  Array ? [] : {}
@@ -37,6 +38,9 @@ export function createApp() {
 	const app = createSSRApp(App)
 	app.config.globalProperties.$deepClone = deepClone
 	app.use(Store)
+	app.use(uView)
+	app.use(createPinia())
+	
 	return {
 		app
 	}

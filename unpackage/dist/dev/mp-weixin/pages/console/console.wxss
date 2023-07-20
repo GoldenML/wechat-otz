@@ -1,16 +1,19 @@
 /* 水平间距 */
 /* 水平间距 */
-.console {
+.uni-navbar--shadow.data-v-f57bffea {
+  box-shadow: 0 1px 0px #ccc !important;
+}
+.console.data-v-f57bffea {
   position: fixed;
   bottom: 40px;
   height: "60px";
   display: flex;
   width: 100%;
 }
-.console-item {
+.console-item.data-v-f57bffea {
   text-align: center;
   width: 33%;
 }
-.console-item__title {
+.console-item__title.data-v-f57bffea {
   font-size: 12px;
 }

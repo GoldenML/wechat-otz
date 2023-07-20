@@ -1,5 +1,8 @@
 /* 水平间距 */
 /* 水平间距 */
+.uni-navbar--shadow.data-v-26544265 {
+  box-shadow: 0 1px 0px #ccc !important;
+}
 .uni-nav-bar-text.data-v-26544265 {
   font-size: 14px;
 }

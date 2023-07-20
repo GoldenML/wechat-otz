@@ -21,6 +21,9 @@ export const post = (url, data, headers, other) => {
 				...headers
 			},
 			success: (res) => {
+				if (res.statusCode === 403) {
+					return
+				} 
 				if (res.statusCode && res.statusCode != 200) {
 					uni.showToast({
 						title: "api错误" + res.errMsg,
@@ -34,6 +37,7 @@ export const post = (url, data, headers, other) => {
 				resolve(res.data)
 			},
 			fail: (e) => {
+				
 				uni.showToast({
 					title: "" + e.data.msg,
 					icon: 'none'

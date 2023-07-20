@@ -1,20 +1,23 @@
 /* 水平间距 */
 /* 水平间距 */
-.chat-item {
+.uni-navbar--shadow.data-v-9ac0a754 {
+  box-shadow: 0 1px 0px #ccc !important;
+}
+.chat-item.data-v-9ac0a754 {
   height: 100vh;
   background-color: whitesmoke;
 }
-.chat-content {
+.chat-content.data-v-9ac0a754 {
   overflow-y: auto;
   background-color: whitesmoke;
   height: calc(100vh - 100px);
 }
-.chat-content-left {
+.chat-content-left.data-v-9ac0a754 {
   margin-top: 10px;
   margin-left: 20px;
   padding-bottom: 10px;
 }
-.chat-content-left__img {
+.chat-content-left__img.data-v-9ac0a754 {
   text-align: left;
   display: inline-block;
   line-height: 32px;
@@ -25,7 +28,7 @@
   font-size: 14px;
   white-space: pre-wrap;
 }
-.chat-content-left__box {
+.chat-content-left__box.data-v-9ac0a754 {
   max-width: 250px;
   text-align: left;
   display: inline-block;
@@ -38,13 +41,13 @@
   font-size: 14px;
   white-space: pre-wrap;
 }
-.chat-content-right {
+.chat-content-right.data-v-9ac0a754 {
   text-align: right;
   margin-top: 10px;
   margin-right: 20px;
   padding-bottom: 10px;
 }
-.chat-content-right__img {
+.chat-content-right__img.data-v-9ac0a754 {
   text-align: left;
   display: inline-block;
   line-height: 32px;
@@ -55,7 +58,7 @@
   font-size: 14px;
   white-space: pre-wrap;
 }
-.chat-content-right__box {
+.chat-content-right__box.data-v-9ac0a754 {
   max-width: 250px;
   text-align: left;
   display: inline-block;
@@ -68,7 +71,7 @@
   font-size: 14px;
   white-space: pre-wrap;
 }
-.chat-input {
+.chat-input.data-v-9ac0a754 {
   border-top: 1px solid lightgray;
   background-color: whitesmoke;
   position: fixed;
@@ -77,18 +80,18 @@
   padding-bottom: 40px;
   width: 100%;
 }
-.box-bg {
+.box-bg.data-v-9ac0a754 {
   background-color: #F5F5F5;
   padding: 5px 0;
 }
-.city {
+.city.data-v-9ac0a754 {
   display: flex;
   flex-direction: row;
   align-items: center;
   justify-content: flex-start;
   margin-left: 4px;
 }
-.input-view {
+.input-view.data-v-9ac0a754 {
   display: flex;
   flex-direction: row;
   flex: 1;
@@ -100,13 +103,16 @@
   margin: 7px 0;
   line-height: 30px;
 }
-.input-uni-icon {
+.input-uni-icon.data-v-9ac0a754 {
   line-height: 30px;
 }
-.nav-bar-input {
+.nav-bar-input.data-v-9ac0a754 {
   height: 30px;
   line-height: 30px;
   padding: 0 5px;
   font-size: 12px;
   background-color: #f8f8f8;
+}
+.data-v-9ac0a754 .uni-navbar--shadow {
+  box-shadow: 0 1px 0px #ccc !important;
 }

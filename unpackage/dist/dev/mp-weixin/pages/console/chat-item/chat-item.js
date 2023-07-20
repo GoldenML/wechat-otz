@@ -2,20 +2,21 @@
 const common_vendor = require("../../../common/vendor.js");
 const utils_request = require("../../../utils/request.js");
 const common_ApiPath = require("../../../common/ApiPath.js");
+const store_userStore = require("../../../store/userStore.js");
 require("../../../common/operate.js");
 require("../../../store/index.js");
 if (!Array) {
-  const _easycom_uni_nav_bar2 = common_vendor.resolveComponent("uni-nav-bar");
   const _easycom_uni_icons2 = common_vendor.resolveComponent("uni-icons");
+  const _component_el_view = common_vendor.resolveComponent("el-view");
   const _easycom_uni_easyinput2 = common_vendor.resolveComponent("uni-easyinput");
-  (_easycom_uni_nav_bar2 + _easycom_uni_icons2 + _easycom_uni_easyinput2)();
+  (_easycom_uni_icons2 + _component_el_view + _easycom_uni_easyinput2)();
 }
-const _easycom_uni_nav_bar = () => "../../../uni_modules/uni-nav-bar/components/uni-nav-bar/uni-nav-bar.js";
 const _easycom_uni_icons = () => "../../../uni_modules/uni-icons/components/uni-icons/uni-icons.js";
 const _easycom_uni_easyinput = () => "../../../uni_modules/uni-easyinput/components/uni-easyinput/uni-easyinput.js";
 if (!Math) {
-  (_easycom_uni_nav_bar + _easycom_uni_icons + _easycom_uni_easyinput)();
+  (TopBar + _easycom_uni_icons + _easycom_uni_easyinput)();
 }
+const TopBar = () => "../../../components/TopBar.js";
 const _sfc_main = {
   __name: "chat-item",
   setup(__props) {
@@ -28,11 +29,7 @@ const _sfc_main = {
         delta: 1
       });
     };
-    const msgs = common_vendor.computed(() => proxy.$store.state.msgs);
-    const operateUsername = common_vendor.computed(() => proxy.$store.state.operateUsername);
-    const userInfo = common_vendor.computed(() => proxy.$store.state.userInfo);
-    const groupMember = common_vendor.computed(() => proxy.$store.state.groupMember);
-    const cacheUser = common_vendor.computed(() => proxy.$store.state.cacheUser);
+    const store = store_userStore.userStore();
     const toView = common_vendor.ref("");
     common_vendor.ref("");
     const height = common_vendor.ref(0);
@@ -42,22 +39,35 @@ const _sfc_main = {
     common_vendor.ref(0);
     common_vendor.ref(0);
     common_vendor.onMounted(() => {
-      console.log(operateUsername.value);
+      var _a;
+      console.log("type=====>", (_a = store.msgs[store.operateUsername]) == null ? void 0 : _a.type);
       proxy.$nextTick(() => {
         let query = common_vendor.wx$1.createSelectorQuery();
         query.select(".container").boundingClientRect((res) => {
           containerHeight.value = res.height;
         }).exec();
         query.select(".chat-input").boundingClientRect((res) => {
-          height.value = Number(Number(res.top - containerHeight.value).toFixed(0));
+          height.value = Number(Number(res.top - 32 - containerHeight.value).toFixed(0));
         }).exec();
         scrollBottom();
       });
     });
-    common_vendor.watch(() => msgs.value[operateUsername.value], (value) => {
+    common_vendor.watch(() => store.msgs[store.operateUsername], (value) => {
       scrollBottom();
     });
-    const handleShowInfo = () => {
+    const handleShowInfo = (type, username) => {
+      console.log(77777, type, username);
+      if (!username) {
+        store.updateLookUserInfo(store.userInfo);
+      } else if (type === 1) {
+        const idx = store.friendInfos.findIndex((e) => e.username === store.operateUsername);
+        store.updateLookUserInfo(store.friendInfos[idx]);
+      } else if (type === 2) {
+        store.updateLookUserInfo(store.groupMember[store.operateUsername][username]);
+      }
+      common_vendor.index.navigateTo({
+        url: "/pages/console/user-info/user-info"
+      });
     };
     const scrollBottom = () => {
       toView.value = "";
@@ -79,24 +89,23 @@ const _sfc_main = {
     const globalFunc = common_vendor.inject("globalFunc");
     const sendMessage = () => {
       message.value;
-      console.log(operateUsername.value);
-      const client_sequence = userInfo.value.username + (/* @__PURE__ */ new Date()).getTime();
+      const client_sequence = store.userInfo.username + (/* @__PURE__ */ new Date()).getTime();
       const data = {
         msg_type: 1,
         from_type: 1,
-        to_type: msgs.value[operateUsername.value].type,
-        to_username: operateUsername.value,
+        to_type: store.msgs.value[store.operateUsername].type,
+        to_username: store.operateUsername,
         text_msg: {
           text: message.value
         },
-        from_username: userInfo.value.username,
+        from_username: store.userInfo.value.username,
         wait: true,
         client_sequence,
         formatTime: formatDate((/* @__PURE__ */ new Date()).getTime())
       };
-      msgs.value[operateUsername.value].lastUsername = userInfo.value.username;
-      msgs.value[operateUsername.value].lastMsg = message.value;
-      msgs.value[operateUsername.value].msgList.push(data);
+      store.msgs[store.operateUsername].lastUsername = store.userInfo.username;
+      store.msgs[store.operateUsername].lastMsg = message.value;
+      store.msgs[store.operateUsername].msgList.push(data);
       message.value = "";
       scrollBottom();
       utils_request.post(common_ApiPath.otz.USER_SEND_MSG, {
@@ -112,27 +121,20 @@ const _sfc_main = {
       return common_vendor.e({
         a: common_vendor.o(back),
         b: common_vendor.p({
-          dark: true,
-          fixed: true,
-          color: "#000000",
-          shadow: true,
           ["background-color"]: "rgb(245, 245, 245)",
           ["left-icon"]: "left",
-          ["left-text"]: "返回",
-          border: false,
-          height: 60,
-          title: (_a = common_vendor.unref(msgs)[common_vendor.unref(operateUsername)]) == null ? void 0 : _a.nickname
+          title: (_a = common_vendor.unref(store).msgs[common_vendor.unref(store).operateUsername]) == null ? void 0 : _a.nickname
         }),
-        c: ((_b = common_vendor.unref(msgs)[common_vendor.unref(operateUsername)]) == null ? void 0 : _b.type) === 1
-      }, ((_c = common_vendor.unref(msgs)[common_vendor.unref(operateUsername)]) == null ? void 0 : _c.type) === 1 ? {
-        d: common_vendor.f(common_vendor.unref(msgs)[common_vendor.unref(operateUsername)].msgList, (msg, k0, i0) => {
+        c: ((_b = common_vendor.unref(store).msgs[common_vendor.unref(store).operateUsername]) == null ? void 0 : _b.type) === 1
+      }, ((_c = common_vendor.unref(store).msgs[common_vendor.unref(store).operateUsername]) == null ? void 0 : _c.type) === 1 ? {
+        d: common_vendor.f(common_vendor.unref(store).msgs[common_vendor.unref(store).operateUsername].msgList, (msg, k0, i0) => {
           var _a2, _b2;
           return common_vendor.e({
-            a: msg.from_username === common_vendor.unref(msgs)[common_vendor.unref(operateUsername)].username
-          }, msg.from_username === common_vendor.unref(msgs)[common_vendor.unref(operateUsername)].username ? common_vendor.e({
+            a: msg.from_username === common_vendor.unref(store).msgs[common_vendor.unref(store).operateUsername].username
+          }, msg.from_username === common_vendor.unref(store).msgs[common_vendor.unref(store).operateUsername].username ? common_vendor.e({
             b: common_vendor.t(msg.formatTime),
-            c: common_vendor.unref(msgs)[common_vendor.unref(operateUsername)].avatar,
-            d: common_vendor.o(($event) => handleShowInfo(), msg.sequence),
+            c: common_vendor.unref(store).msgs[common_vendor.unref(store).operateUsername].avatar,
+            d: common_vendor.o(($event) => handleShowInfo(1, common_vendor.unref(store).operateUsername), msg.sequence),
             e: msg.msg_type === 2
           }, msg.msg_type === 2 ? {
             f: msg.image_msg.image_url
@@ -141,7 +143,7 @@ const _sfc_main = {
           }, {
             h: msg.wait
           }, msg.wait ? {
-            i: "e796f79c-1-" + i0,
+            i: "9ac0a754-2-" + i0 + ",9ac0a754-1",
             j: common_vendor.p({
               type: "spinner-cycle",
               size: "20"
@@ -150,7 +152,7 @@ const _sfc_main = {
             k: common_vendor.t(msg.formatTime),
             l: msg.wait
           }, msg.wait ? {
-            m: "e796f79c-2-" + i0,
+            m: "9ac0a754-3-" + i0 + ",9ac0a754-1",
             n: common_vendor.p({
               type: "spinner-cycle",
               size: "20"
@@ -162,26 +164,26 @@ const _sfc_main = {
           } : {
             q: common_vendor.t((_b2 = msg.text_msg) == null ? void 0 : _b2.text)
           }, {
-            r: common_vendor.unref(userInfo).avatar,
-            s: common_vendor.o(($event) => handleShowInfo(), msg.sequence)
+            r: common_vendor.unref(store).userInfo.avatar,
+            s: common_vendor.o(handleShowInfo, msg.sequence)
           }), {
             t: msg.sequence,
             v: msg.sequence
           });
         })
-      } : ((_d = common_vendor.unref(msgs)[common_vendor.unref(operateUsername)]) == null ? void 0 : _d.type) === 2 ? {
-        f: common_vendor.f(common_vendor.unref(msgs)[common_vendor.unref(operateUsername)].msgList, (msg, k0, i0) => {
+      } : ((_d = common_vendor.unref(store).msgs[common_vendor.unref(store).operateUsername]) == null ? void 0 : _d.type) === 2 ? {
+        f: common_vendor.f(common_vendor.unref(store).msgs[common_vendor.unref(store).operateUsername].msgList, (msg, k0, i0) => {
           var _a2, _b2, _c2, _d2, _e2;
           return common_vendor.e({
             a: msg.isSystemMsg
           }, msg.isSystemMsg ? {
             b: common_vendor.t(msg.formatTime),
             c: common_vendor.t((_a2 = msg.text_msg) == null ? void 0 : _a2.text)
-          } : msg.from_username === common_vendor.unref(userInfo).username ? common_vendor.e({
+          } : msg.from_username === common_vendor.unref(store).userInfo.username ? common_vendor.e({
             e: common_vendor.t(msg.formatTime),
             f: msg.wait
           }, msg.wait ? {
-            g: "e796f79c-3-" + i0,
+            g: "9ac0a754-4-" + i0 + ",9ac0a754-1",
             h: common_vendor.p({
               type: "spinner-cycle",
               size: "20"
@@ -193,13 +195,13 @@ const _sfc_main = {
           } : {
             k: common_vendor.t((_b2 = msg.text_msg) == null ? void 0 : _b2.text)
           }, {
-            l: common_vendor.unref(userInfo).avatar,
-            m: common_vendor.o(($event) => handleShowInfo(), msg.sequence)
+            l: common_vendor.unref(store).userInfo.avatar,
+            m: common_vendor.o(handleShowInfo, msg.sequence)
           }) : common_vendor.e({
             n: common_vendor.t(msg.formatTime),
-            o: common_vendor.unref(groupMember)[common_vendor.unref(operateUsername)][msg.from_username] ? common_vendor.unref(groupMember)[common_vendor.unref(operateUsername)][msg.from_username].avatar : (_c2 = common_vendor.unref(cacheUser)[msg.from_username]) == null ? void 0 : _c2.avatar,
-            p: common_vendor.o(($event) => handleShowInfo($event, false, true, msg.from_username), msg.sequence),
-            q: common_vendor.t(common_vendor.unref(groupMember)[common_vendor.unref(operateUsername)][msg.from_username] ? common_vendor.unref(groupMember)[common_vendor.unref(operateUsername)][msg.from_username].nickname : (_d2 = common_vendor.unref(cacheUser)[msg.from_username]) == null ? void 0 : _d2.nickname),
+            o: common_vendor.unref(store).groupMember[common_vendor.unref(store).operateUsername][msg.from_username] ? common_vendor.unref(store).groupMember[common_vendor.unref(store).operateUsername][msg.from_username].avatar : (_c2 = common_vendor.unref(store).cacheUser[msg.from_username]) == null ? void 0 : _c2.avatar,
+            p: common_vendor.o(($event) => handleShowInfo(2, msg.from_username), msg.sequence),
+            q: common_vendor.t(common_vendor.unref(store).groupMember[common_vendor.unref(store).operateUsername][msg.from_username] ? common_vendor.unref(store).groupMember[common_vendor.unref(store).operateUsername][msg.from_username].nickname : (_d2 = common_vendor.unref(store).cacheUser[msg.from_username]) == null ? void 0 : _d2.nickname),
             r: msg.msg_type === 2
           }, msg.msg_type === 2 ? {
             s: msg.image_msg.image_url
@@ -208,18 +210,18 @@ const _sfc_main = {
           }, {
             v: msg.wait
           }, msg.wait ? {
-            w: "e796f79c-4-" + i0,
+            w: "9ac0a754-5-" + i0 + ",9ac0a754-1",
             x: common_vendor.p({
               type: "spinner-cycle",
               size: "20"
             })
           } : {}), {
-            d: msg.from_username === common_vendor.unref(userInfo).username,
+            d: msg.from_username === common_vendor.unref(store).userInfo.username,
             y: msg.sequence
           });
         })
       } : {}, {
-        e: ((_e = common_vendor.unref(msgs)[common_vendor.unref(operateUsername)]) == null ? void 0 : _e.type) === 2,
+        e: ((_e = common_vendor.unref(store).msgs[common_vendor.unref(store).operateUsername]) == null ? void 0 : _e.type) === 2,
         g: toView.value,
         h: height.value + "px",
         i: common_vendor.o(($event) => message.value = $event),
@@ -233,5 +235,5 @@ const _sfc_main = {
     };
   }
 };
-const MiniProgramPage = /* @__PURE__ */ common_vendor._export_sfc(_sfc_main, [["__file", "D:/otz/wechat-otz/pages/console/chat-item/chat-item.vue"]]);
+const MiniProgramPage = /* @__PURE__ */ common_vendor._export_sfc(_sfc_main, [["__scopeId", "data-v-9ac0a754"], ["__file", "D:/otz/wechat-otz/pages/console/chat-item/chat-item.vue"]]);
 wx.createPage(MiniProgramPage);

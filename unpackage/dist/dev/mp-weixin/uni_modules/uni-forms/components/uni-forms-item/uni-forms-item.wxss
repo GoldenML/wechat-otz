@@ -1,5 +1,8 @@
 /* 水平间距 */
 /* 水平间距 */
+.uni-navbar--shadow {
+  box-shadow: 0 1px 0px #ccc !important;
+}
 .uni-forms-item {
   position: relative;
   display: flex;

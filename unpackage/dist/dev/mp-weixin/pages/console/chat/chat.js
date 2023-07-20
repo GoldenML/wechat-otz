@@ -1,5 +1,6 @@
 "use strict";
 const common_vendor = require("../../../common/vendor.js");
+const store_userStore = require("../../../store/userStore.js");
 if (!Array) {
   const _easycom_uni_list_chat2 = common_vendor.resolveComponent("uni-list-chat");
   const _easycom_uni_list2 = common_vendor.resolveComponent("uni-list");
@@ -13,19 +14,21 @@ if (!Math) {
 const _sfc_main = {
   __name: "chat",
   setup(__props) {
-    const {
-      proxy
-    } = common_vendor.getCurrentInstance();
-    const badges = common_vendor.computed(() => proxy.$store.state.badges);
+    const store = store_userStore.userStore();
     const onClick = (username) => {
-      proxy.$store.commit("updateOperateUsername", username);
-      badges.value[username] = 0;
-      console.log(badges);
-      proxy.$store.commit("updateBadges", badges.value);
+      console.log("username", username);
+      store.updateOperateUsername(username);
+      store.badges[username] = 0;
+    };
+    const formatTime = (timestamp) => {
+      if (new Date(Number(timestamp)).setHours(0, 0, 0, 0) === (/* @__PURE__ */ new Date()).setHours(0, 0, 0, 0)) {
+        return common_vendor.hooks(Number(timestamp)).format("HH:mm");
+      }
+      return common_vendor.hooks(Number(timestamp)).format("YY/MM/DD");
     };
     return (_ctx, _cache) => {
       return {
-        a: common_vendor.f(common_vendor.unref(proxy).$store.state.msgs, (value, key, i0) => {
+        a: common_vendor.f(common_vendor.unref(store).msgs, (value, key, i0) => {
           return {
             a: key,
             b: common_vendor.o(($event) => onClick(value.username), key),
@@ -40,9 +43,9 @@ const _sfc_main = {
               clickable: true,
               link: "navigateTo",
               ["badge-positon"]: "left",
-              ["badge-text"]: common_vendor.unref(badges)[value.username],
-              showBadge: common_vendor.unref(badges)[value.username],
-              time: value.lastTime
+              ["badge-text"]: common_vendor.unref(store).badges[value.username],
+              showBadge: common_vendor.unref(store).badges[value.username],
+              time: formatTime(value.lastTime)
             })
           };
         }),

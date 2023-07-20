@@ -6,6 +6,7 @@ if (!Math) {
   "./pages/login/login.js";
   "./pages/console/console.js";
   "./pages/console/chat-item/chat-item.js";
+  "./pages/console/user-info/user-info.js";
 }
 function deepClone(source) {
   const target = source.constructor === Array ? [] : {};
@@ -25,6 +26,8 @@ function createApp() {
   const app = common_vendor.createSSRApp(App);
   app.config.globalProperties.$deepClone = deepClone;
   app.use(store_index.Store);
+  app.use(common_vendor.uView);
+  app.use(common_vendor.createPinia());
   return {
     app
   };

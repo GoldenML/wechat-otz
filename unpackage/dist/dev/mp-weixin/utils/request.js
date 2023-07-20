@@ -21,6 +21,9 @@ const post = (url, data, headers, other) => {
         ...headers
       },
       success: (res) => {
+        if (res.statusCode === 403) {
+          return;
+        }
         if (res.statusCode && res.statusCode != 200) {
           common_vendor.index.showToast({
             title: "api错误" + res.errMsg,

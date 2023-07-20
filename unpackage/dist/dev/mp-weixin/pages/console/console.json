@@ -1,9 +1,11 @@
 {
-  "navigationBarTitleText": "首页",
+  "navigationBarTitleText": "OTZ",
   "enablePullDownRefresh": false,
   "usingComponents": {
     "uni-icons": "../../uni_modules/uni-icons/components/uni-icons/uni-icons",
     "chat-module": "./chat/chat",
-    "staff-module": "./staff/staff"
+    "staff-module": "./staff/staff",
+    "mine": "./mine/mine",
+    "top-bar": "../../components/TopBar"
   }
 }
