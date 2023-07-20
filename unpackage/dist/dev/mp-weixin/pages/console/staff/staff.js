@@ -80,5 +80,5 @@ const _sfc_main = {
     };
   }
 };
-const Component = /* @__PURE__ */ common_vendor._export_sfc(_sfc_main, [["__scopeId", "data-v-b520e742"], ["__file", "D:/otz/wechat-otz/pages/console/staff/staff.vue"]]);
+const Component = /* @__PURE__ */ common_vendor._export_sfc(_sfc_main, [["__scopeId", "data-v-b520e742"], ["__file", "D:/workspace/wechat-otz/pages/console/staff/staff.vue"]]);
 wx.createComponent(Component);

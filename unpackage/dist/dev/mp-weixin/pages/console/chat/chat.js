@@ -32,7 +32,7 @@ const _sfc_main = {
           return {
             a: key,
             b: common_vendor.o(($event) => onClick(value.username), key),
-            c: "6341fca0-1-" + i0 + ",6341fca0-0",
+            c: "93cc3600-1-" + i0 + ",93cc3600-0",
             d: common_vendor.p({
               to: "/pages/console/chat-item/chat-item",
               ["avatar-circle"]: false,
@@ -56,5 +56,5 @@ const _sfc_main = {
     };
   }
 };
-const Component = /* @__PURE__ */ common_vendor._export_sfc(_sfc_main, [["__file", "D:/otz/wechat-otz/pages/console/chat/chat.vue"]]);
+const Component = /* @__PURE__ */ common_vendor._export_sfc(_sfc_main, [["__file", "D:/workspace/wechat-otz/pages/console/chat/chat.vue"]]);
 wx.createComponent(Component);

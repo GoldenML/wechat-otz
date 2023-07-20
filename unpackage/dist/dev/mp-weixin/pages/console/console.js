@@ -356,5 +356,5 @@ const _sfc_main = {
     };
   }
 };
-const MiniProgramPage = /* @__PURE__ */ common_vendor._export_sfc(_sfc_main, [["__scopeId", "data-v-f57bffea"], ["__file", "D:/otz/wechat-otz/pages/console/console.vue"]]);
+const MiniProgramPage = /* @__PURE__ */ common_vendor._export_sfc(_sfc_main, [["__scopeId", "data-v-f57bffea"], ["__file", "D:/workspace/wechat-otz/pages/console/console.vue"]]);
 wx.createPage(MiniProgramPage);

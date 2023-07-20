@@ -190,5 +190,5 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
     H: $props.fixed ? 1 : ""
   });
 }
-const Component = /* @__PURE__ */ common_vendor._export_sfc(_sfc_main, [["render", _sfc_render], ["__scopeId", "data-v-26544265"], ["__file", "D:/otz/wechat-otz/uni_modules/uni-nav-bar/components/uni-nav-bar/uni-nav-bar.vue"]]);
+const Component = /* @__PURE__ */ common_vendor._export_sfc(_sfc_main, [["render", _sfc_render], ["__scopeId", "data-v-26544265"], ["__file", "D:/workspace/wechat-otz/uni_modules/uni-nav-bar/components/uni-nav-bar/uni-nav-bar.vue"]]);
 wx.createComponent(Component);

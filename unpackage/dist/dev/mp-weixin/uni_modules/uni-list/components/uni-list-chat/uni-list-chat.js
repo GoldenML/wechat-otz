@@ -226,5 +226,5 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
     z: common_vendor.o((...args) => $options.onClick && $options.onClick(...args))
   });
 }
-const Component = /* @__PURE__ */ common_vendor._export_sfc(_sfc_main, [["render", _sfc_render], ["__file", "D:/otz/wechat-otz/uni_modules/uni-list/components/uni-list-chat/uni-list-chat.vue"]]);
+const Component = /* @__PURE__ */ common_vendor._export_sfc(_sfc_main, [["render", _sfc_render], ["__file", "D:/workspace/wechat-otz/uni_modules/uni-list/components/uni-list-chat/uni-list-chat.vue"]]);
 wx.createComponent(Component);

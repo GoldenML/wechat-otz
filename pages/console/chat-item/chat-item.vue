@@ -1,102 +1,99 @@
 <template>
 	<view class="chat-item">
 		<view class="container">
-			<TopBar background-color="rgb(245, 245, 245)" left-icon="left" :title="store.msgs[store.operateUsername]?.nickname" @back="back"></TopBar>
+			<TopBar background-color="rgb(245, 245, 245)" left-icon="left"
+				:title="store.msgs[store.operateUsername]?.nickname" @back="back"></TopBar>
 		</view>
-		<el-view >
-			<scroll-view class="chat-content" :scroll-into-view="toView" :style="{height: height + 'px'}" scroll-y="true">
-				<view id="scroll-top"></view>
-				<view v-if="store.msgs[store.operateUsername]?.type === 1">
-					<view v-for="msg in store.msgs[store.operateUsername].msgList" :key="msg.sequence" :id="msg.sequence">
-						<view v-if="msg.from_username === store.msgs[store.operateUsername].username">
-							<view style="text-align: center; font-size: 12px;color: rgb(168,166,166); padding-top: 5px;">
-								{{ msg.formatTime }}
-							</view>
-							<view class="chat-content-left">
-								<image alt=""
-									style="float:left;vertical-align: middle; cursor: pointer; width: 32px; height: 32px;"
-									:src="store.msgs[store.operateUsername].avatar" :width="32" :height="32"
-									@click.stop="handleShowInfo(1, store.operateUsername)">
-								</image>
-								<view v-if="msg.msg_type === 2" class="chat-content-left__img">
-									<image mode="widthFix" style="width: 150px" :src="msg.image_msg.image_url" alt=""></image>
-								</view>
-								<view v-else class="chat-content-left__box">
-									{{ msg.text_msg?.text }}
-								</view>
-								<uni-icons v-if="msg.wait" type="spinner-cycle" size="20"></uni-icons>
-							</view>
+		<scroll-view class="chat-content" :scroll-into-view="toView" :style="{height: height + 'px'}" scroll-y="true">
+			<view id="scroll-top"></view>
+			<view v-if="store.msgs[store.operateUsername]?.type === 1">
+				<view v-for="msg in store.msgs[store.operateUsername].msgList" :key="msg.sequence" :id="msg.sequence">
+					<view v-if="msg.from_username === store.msgs[store.operateUsername].username">
+						<view style="text-align: center; font-size: 12px;color: rgb(168,166,166); padding-top: 5px;">
+							{{ msg.formatTime }}
 						</view>
-						<view v-else>
-							<view style="text-align: center; font-size: 12px;color: rgb(168,166,166);padding-top: 5px;">
-								{{ msg.formatTime }}
+						<view class="chat-content-left">
+							<image alt="" style="float:left;vertical-align: middle; cursor: pointer; width: 32px; height: 32px;"
+								:src="store.msgs[store.operateUsername].avatar" :width="32" :height="32"
+								@click.stop="handleShowInfo(1, store.operateUsername)">
+							</image>
+							<view v-if="msg.msg_type === 2" class="chat-content-left__img">
+								<image mode="widthFix" style="width: 150px" :src="msg.image_msg.image_url" alt=""></image>
 							</view>
-							<view class="chat-content-right">
-								<uni-icons v-if="msg.wait" type="spinner-cycle" size="20"></uni-icons>
-								<view v-if="msg.msg_type === 2" class="chat-content-right__img">
-									<image mode="widthFix" style="width: 150px;" :src="msg.image_msg.image_url" alt=""></image>
-								</view>
-								<view v-else class="chat-content-right__box">
-									{{ msg.text_msg?.text }}
-								</view>
-								<image alt="" style="float: right; vertical-align: middle; cursor: pointer;width: 32px; height: 32px;"
-									:src="store.userInfo.avatar" :width="32" :height="32" @click.stop="handleShowInfo"></image>
-							</view>
-						</view>
-					</view>
-				</view>
-				<view v-else-if="store.msgs[store.operateUsername]?.type === 2">
-					<view v-for="msg in store.msgs[store.operateUsername].msgList" :key="msg.sequence">
-						<view v-if="msg.isSystemMsg">
-							<view style="text-align: center; font-size: 12px;color: rgb(198, 173, 173)">
-								<view style="text-align: center; font-size: 12px;color: rgb(168,166,166);padding-top: 5px;">
-									{{ msg.formatTime }}
-								</view>
+							<view v-else class="chat-content-left__box">
 								{{ msg.text_msg?.text }}
 							</view>
+							<uni-icons v-if="msg.wait" type="spinner-cycle" size="20"></uni-icons>
 						</view>
-						<view v-else-if="msg.from_username === store.userInfo.username">
-							<view style="text-align: center; font-size: 12px;color: rgb(168,166,166);padding-top: 5px;">
-								{{ msg.formatTime }}
-							</view>
-							<view class="chat-content-right">
-								<uni-icons v-if="msg.wait" type="spinner-cycle" size="20"></uni-icons>
-								<view v-if="msg.msg_type === 2" class="chat-content-right__img">
-									<image mode="widthFix" style="width: 150px" :src="msg.image_msg.image_url" alt=""></image>
-								</view>
-								<view v-else class="chat-content-right__box">
-									{{ msg.text_msg?.text }}
-								</view>
-
-								<image alt=""
-									style="float:right;vertical-align: middle; cursor: pointer; width: 32px; height: 32px;"
-									:src="store.userInfo.avatar" :width="32" :height="32" @click.stop="handleShowInfo">
-								</image>
-							</view>
+					</view>
+					<view v-else>
+						<view style="text-align: center; font-size: 12px;color: rgb(168,166,166);padding-top: 5px;">
+							{{ msg.formatTime }}
 						</view>
-						<view v-else>
-							<view style="text-align: center; font-size: 12px;color: rgb(168,166,166)"> {{ msg.formatTime }}</view>
-							<view class="chat-content-left">
-								<image alt="" style="float:left;vertical-align: middle; cursor: pointer;width: 32px;height: 32px"
-									:src="store.groupMember[store.operateUsername][msg.from_username] ? store.groupMember[store.operateUsername][msg.from_username].avatar : store.cacheUser[msg.from_username]?.avatar"
-									@click.stop="handleShowInfo(2, msg.from_username)"></image>
-								<view style="font-size: 12px; margin-left: 38px;position:relative; top: -8px;color: rgb(184, 184, 184)">
-									{{ store.groupMember[store.operateUsername][msg.from_username] ? store.groupMember[store.operateUsername][msg.from_username].nickname : store.cacheUser[msg.from_username]?.nickname }}
-								</view>
-								<view v-if="msg.msg_type === 2" class="chat-content-left__img">
-									<image mode="widthFix" style="width: 150px" :src="msg.image_msg.image_url" alt=""></image>
-								</view>
-								<view v-else class="chat-content-left__box">
-									{{ msg.text_msg?.text }}
-								</view>
-								<uni-icons v-if="msg.wait" type="spinner-cycle" size="20"></uni-icons>
+						<view class="chat-content-right">
+							<uni-icons v-if="msg.wait" type="spinner-cycle" size="20"></uni-icons>
+							<view v-if="msg.msg_type === 2" class="chat-content-right__img">
+								<image mode="widthFix" style="width: 150px;" :src="msg.image_msg.image_url" alt=""></image>
 							</view>
+							<view v-else class="chat-content-right__box">
+								{{ msg.text_msg?.text }}
+							</view>
+							<image alt="" style="float: right; vertical-align: middle; cursor: pointer;width: 32px; height: 32px;"
+								:src="store.userInfo.avatar" :width="32" :height="32" @click.stop="handleShowInfo"></image>
 						</view>
 					</view>
 				</view>
-				<view id="scroll-bottom"></view>
-			</scroll-view>
-		</el-view>
+			</view>
+			<view v-else-if="store.msgs[store.operateUsername]?.type === 2">
+				<view v-for="msg in store.msgs[store.operateUsername].msgList" :key="msg.sequence">
+					<view v-if="msg.isSystemMsg">
+						<view style="text-align: center; font-size: 12px;color: rgb(198, 173, 173)">
+							<view style="text-align: center; font-size: 12px;color: rgb(168,166,166);padding-top: 5px;">
+								{{ msg.formatTime }}
+							</view>
+							{{ msg.text_msg?.text }}
+						</view>
+					</view>
+					<view v-else-if="msg.from_username === store.userInfo.username">
+						<view style="text-align: center; font-size: 12px;color: rgb(168,166,166);padding-top: 5px;">
+							{{ msg.formatTime }}
+						</view>
+						<view class="chat-content-right">
+							<uni-icons v-if="msg.wait" type="spinner-cycle" size="20"></uni-icons>
+							<view v-if="msg.msg_type === 2" class="chat-content-right__img">
+								<image mode="widthFix" style="width: 150px" :src="msg.image_msg.image_url" alt=""></image>
+							</view>
+							<view v-else class="chat-content-right__box">
+								{{ msg.text_msg?.text }}
+							</view>
+		
+							<image alt="" style="float:right;vertical-align: middle; cursor: pointer; width: 32px; height: 32px;"
+								:src="store.userInfo.avatar" :width="32" :height="32" @click.stop="handleShowInfo">
+							</image>
+						</view>
+					</view>
+					<view v-else>
+						<view style="text-align: center; font-size: 12px;color: rgb(168,166,166)"> {{ msg.formatTime }}</view>
+						<view class="chat-content-left">
+							<image alt="" style="float:left;vertical-align: middle; cursor: pointer;width: 32px;height: 32px"
+								:src="store.groupMember[store.operateUsername][msg.from_username] ? store.groupMember[store.operateUsername][msg.from_username].avatar : store.cacheUser[msg.from_username]?.avatar"
+								@click.stop="handleShowInfo(2, msg.from_username)"></image>
+							<view style="font-size: 12px; margin-left: 38px;position:relative; top: -8px;color: rgb(184, 184, 184)">
+								{{ store.groupMember[store.operateUsername][msg.from_username] ? store.groupMember[store.operateUsername][msg.from_username].nickname : store.cacheUser[msg.from_username]?.nickname }}
+							</view>
+							<view v-if="msg.msg_type === 2" class="chat-content-left__img">
+								<image mode="widthFix" style="width: 150px" :src="msg.image_msg.image_url" alt=""></image>
+							</view>
+							<view v-else class="chat-content-left__box">
+								{{ msg.text_msg?.text }}
+							</view>
+							<uni-icons v-if="msg.wait" type="spinner-cycle" size="20"></uni-icons>
+						</view>
+					</view>
+				</view>
+			</view>
+			<view id="scroll-bottom"></view>
+		</scroll-view>
 		<view class="message-bottom"></view>
 		<!-- <button @click="testClick">测试</button> -->
 		<view class="chat-input">
@@ -127,7 +124,7 @@
 	import {
 		userStore
 	} from "@/store/userStore";
-import TopBar from '@/components/TopBar.vue'
+	import TopBar from '@/components/TopBar.vue'
 	const {
 		proxy
 	} = getCurrentInstance()
@@ -139,7 +136,7 @@ import TopBar from '@/components/TopBar.vue'
 	}
 
 	const store = userStore()
-	
+
 
 	const toView = ref('')
 	const endId = ref('')
@@ -172,15 +169,15 @@ import TopBar from '@/components/TopBar.vue'
 	})
 	const handleShowInfo = (type, username) => {
 		console.log(77777, type, username);
-		if(!username) {
+		if (!username) {
 			store.updateLookUserInfo(store.userInfo)
-		} else if(type === 1) {
+		} else if (type === 1) {
 			const idx = store.friendInfos.findIndex(e => e.username === store.operateUsername)
 			store.updateLookUserInfo(store.friendInfos[idx])
-		} else if (type ===2) {
+		} else if (type === 2) {
 			store.updateLookUserInfo(store.groupMember[store.operateUsername][username])
 		}
-		
+
 		uni.navigateTo({
 			url: '/pages/console/user-info/user-info'
 		})
@@ -209,12 +206,12 @@ import TopBar from '@/components/TopBar.vue'
 		const data = {
 			msg_type: 1,
 			from_type: 1,
-			to_type: store.msgs.value[store.operateUsername].type,
+			to_type: store.msgs[store.operateUsername].type,
 			to_username: store.operateUsername,
 			text_msg: {
 				text: message.value
 			},
-			from_username: store.userInfo.value.username,
+			from_username: store.userInfo.username,
 			wait: true,
 			client_sequence,
 			formatTime: formatDate(new Date().getTime())
@@ -229,7 +226,8 @@ import TopBar from '@/components/TopBar.vue'
 		}, {}, {
 			hideToast: true
 		}).then(res => {
-			globalFunc.getUserMsg()
+			scrollBottom()
+			// globalFunc.getUserMsg()
 			// wx.showToast({
 
 			// })

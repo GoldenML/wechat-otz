@@ -7,9 +7,8 @@ require("../../../common/operate.js");
 require("../../../store/index.js");
 if (!Array) {
   const _easycom_uni_icons2 = common_vendor.resolveComponent("uni-icons");
-  const _component_el_view = common_vendor.resolveComponent("el-view");
   const _easycom_uni_easyinput2 = common_vendor.resolveComponent("uni-easyinput");
-  (_easycom_uni_icons2 + _component_el_view + _easycom_uni_easyinput2)();
+  (_easycom_uni_icons2 + _easycom_uni_easyinput2)();
 }
 const _easycom_uni_icons = () => "../../../uni_modules/uni-icons/components/uni-icons/uni-icons.js";
 const _easycom_uni_easyinput = () => "../../../uni_modules/uni-easyinput/components/uni-easyinput/uni-easyinput.js";
@@ -86,19 +85,19 @@ const _sfc_main = {
         minutes = "0" + minutes;
       return hours + ":" + minutes;
     };
-    const globalFunc = common_vendor.inject("globalFunc");
+    common_vendor.inject("globalFunc");
     const sendMessage = () => {
       message.value;
       const client_sequence = store.userInfo.username + (/* @__PURE__ */ new Date()).getTime();
       const data = {
         msg_type: 1,
         from_type: 1,
-        to_type: store.msgs.value[store.operateUsername].type,
+        to_type: store.msgs[store.operateUsername].type,
         to_username: store.operateUsername,
         text_msg: {
           text: message.value
         },
-        from_username: store.userInfo.value.username,
+        from_username: store.userInfo.username,
         wait: true,
         client_sequence,
         formatTime: formatDate((/* @__PURE__ */ new Date()).getTime())
@@ -113,7 +112,7 @@ const _sfc_main = {
       }, {}, {
         hideToast: true
       }).then((res) => {
-        globalFunc.getUserMsg();
+        scrollBottom();
       });
     };
     return (_ctx, _cache) => {
@@ -143,7 +142,7 @@ const _sfc_main = {
           }, {
             h: msg.wait
           }, msg.wait ? {
-            i: "9ac0a754-2-" + i0 + ",9ac0a754-1",
+            i: "9ac0a754-1-" + i0,
             j: common_vendor.p({
               type: "spinner-cycle",
               size: "20"
@@ -152,7 +151,7 @@ const _sfc_main = {
             k: common_vendor.t(msg.formatTime),
             l: msg.wait
           }, msg.wait ? {
-            m: "9ac0a754-3-" + i0 + ",9ac0a754-1",
+            m: "9ac0a754-2-" + i0,
             n: common_vendor.p({
               type: "spinner-cycle",
               size: "20"
@@ -183,7 +182,7 @@ const _sfc_main = {
             e: common_vendor.t(msg.formatTime),
             f: msg.wait
           }, msg.wait ? {
-            g: "9ac0a754-4-" + i0 + ",9ac0a754-1",
+            g: "9ac0a754-3-" + i0,
             h: common_vendor.p({
               type: "spinner-cycle",
               size: "20"
@@ -210,7 +209,7 @@ const _sfc_main = {
           }, {
             v: msg.wait
           }, msg.wait ? {
-            w: "9ac0a754-5-" + i0 + ",9ac0a754-1",
+            w: "9ac0a754-4-" + i0,
             x: common_vendor.p({
               type: "spinner-cycle",
               size: "20"
@@ -235,5 +234,5 @@ const _sfc_main = {
     };
   }
 };
-const MiniProgramPage = /* @__PURE__ */ common_vendor._export_sfc(_sfc_main, [["__scopeId", "data-v-9ac0a754"], ["__file", "D:/otz/wechat-otz/pages/console/chat-item/chat-item.vue"]]);
+const MiniProgramPage = /* @__PURE__ */ common_vendor._export_sfc(_sfc_main, [["__scopeId", "data-v-9ac0a754"], ["__file", "D:/workspace/wechat-otz/pages/console/chat-item/chat-item.vue"]]);
 wx.createPage(MiniProgramPage);
