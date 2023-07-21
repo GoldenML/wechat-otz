@@ -101,7 +101,9 @@
 			showSelect: {
 				type: Boolean,
 				default: false
-			}
+			},
+			label: String,
+			value: String
 		},
 		data() {
 			return {
@@ -140,7 +142,7 @@
 			setList() {
 				let index = 0;
 				this.lists = []
-				this.options.forEach((value) => {
+				this.options.forEach((value, index) => {
 					if (value.data.length === 0) {
 						return
 					}
@@ -148,7 +150,8 @@
 					let items = value.data.map(item => {
 						let obj = {}
 						obj['key'] = value.letter
-						obj['name'] = item
+						obj['name'] = item[this.label]
+						obj['element'] = item
 						obj['itemIndex'] = index
 						index++
 						obj.checked = item.checked ? item.checked : false
@@ -282,7 +285,7 @@
 		}
 	}
 </script>
-<style lang="scss" >
+<style lang="scss" scoped>
 	.uni-indexed-list {
 		position: absolute;
 		left: 0;

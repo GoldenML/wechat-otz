@@ -17,21 +17,22 @@ import {
 	createSSRApp
 } from 'vue'
 import uView from 'uview-plus/index'
-import { createPinia } from 'pinia'
-
-function deepClone(source){
-  const target = source.constructor ===  Array ? [] : {}
-  for (const key in source) {
-    if (source.hasOwnProperty(key)) {
-      const element = source[key];
-      if(element && typeof element === 'object'){
-        target[key] = deepClone(source[key])
-      } else {
-        target[key] = source[key]
-      }
-    }
-  }
-  return target
+import {
+	createPinia
+} from 'pinia'
+function deepClone(source) {
+	const target = source.constructor === Array ? [] : {}
+	for (const key in source) {
+		if (source.hasOwnProperty(key)) {
+			const element = source[key];
+			if (element && typeof element === 'object') {
+				target[key] = deepClone(source[key])
+			} else {
+				target[key] = source[key]
+			}
+		}
+	}
+	return target
 }
 
 export function createApp() {
@@ -40,7 +41,7 @@ export function createApp() {
 	app.use(Store)
 	app.use(uView)
 	app.use(createPinia())
-	
+
 	return {
 		app
 	}

@@ -51,6 +51,19 @@
 			})
 			return
 		}
+		
+		const idx = store.friendInfos.findIndex(e => e.username === store.lookUserInfo.username)
+		if (!store.msgs[store.lookUserInfo.username]) {
+			store.msgs[store.lookUserInfo.username] = {
+				type: 1,
+				nickname: store.friendInfos[idx].nickname,
+				avatar: store.friendInfos[idx].avatar,
+				lastUsername: '',
+				lastMsg: '',
+				username: store.lookUserInfo.username,
+				msgList: [],
+			}
+		}
 		uni.navigateTo({
 			url: '/pages/console/chat-item/chat-item'
 		})

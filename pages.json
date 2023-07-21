@@ -29,13 +29,22 @@
 				// "navigationStyle": "custom",
 				//App端的配置
 				// "app-plus": {
-					// "softinputMode": "adjustResize"
+				// 	"softinputMode": "adjustResize"
 				// }
 			}
 
 		}
         ,{
             "path" : "pages/console/user-info/user-info",
+            "style" :                                                                                    
+            {
+                "navigationBarTitleText": "",
+                "enablePullDownRefresh": false
+            }
+            
+        }
+        ,{
+            "path" : "pages/console/group-info/group-info",
             "style" :                                                                                    
             {
                 "navigationBarTitleText": "",

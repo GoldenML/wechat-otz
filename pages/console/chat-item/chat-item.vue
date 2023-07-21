@@ -1,8 +1,8 @@
 <template>
 	<view class="chat-item">
 		<view class="container">
-			<TopBar background-color="rgb(245, 245, 245)" left-icon="left"
-				:title="store.msgs[store.operateUsername]?.nickname" @back="back"></TopBar>
+			<TopBar background-color="rgb(245, 245, 245)" left-icon="left" :isGroup="Boolean(store.groupMember[store.operateUsername])"
+				:title="store.msgs[store.operateUsername]?.nickname" @back="back" @click-title="clickTitle"></TopBar>
 		</view>
 		<scroll-view class="chat-content" :scroll-into-view="toView" :style="{height: height + 'px'}" scroll-y="true">
 			<view id="scroll-top"></view>
@@ -31,7 +31,7 @@
 							{{ msg.formatTime }}
 						</view>
 						<view class="chat-content-right">
-							<uni-icons v-if="msg.wait" type="spinner-cycle" size="20"></uni-icons>
+							<uni-icons style="margin-right: 5px;" v-if="msg.wait" type="spinner-cycle" size="20"></uni-icons>
 							<view v-if="msg.msg_type === 2" class="chat-content-right__img">
 								<image mode="widthFix" style="width: 150px;" :src="msg.image_msg.image_url" alt=""></image>
 							</view>
@@ -59,7 +59,7 @@
 							{{ msg.formatTime }}
 						</view>
 						<view class="chat-content-right">
-							<uni-icons v-if="msg.wait" type="spinner-cycle" size="20"></uni-icons>
+							<uni-icons style="margin-right: 5px;" v-if="msg.wait" type="spinner-cycle" size="20"></uni-icons>
 							<view v-if="msg.msg_type === 2" class="chat-content-right__img">
 								<image mode="widthFix" style="width: 150px" :src="msg.image_msg.image_url" alt=""></image>
 							</view>
@@ -98,7 +98,7 @@
 		<!-- <button @click="testClick">测试</button> -->
 		<view class="chat-input">
 			<view style="width: 70%; margin-left: 15px;display: inline-block; vertical-align: middle;">
-				<uni-easyinput autoHeight v-model="message"></uni-easyinput>
+				<uni-easyinput :adjust-position="false" autoHeight v-model="message"></uni-easyinput>
 			</view>
 			<view style="width: 20%;display: inline-block;vertical-align: middle;margin-left: 5px;">
 				<button :disabled="!message" @click="sendMessage" style="line-height: 36px; font-size: 14px;">发送</button>
@@ -125,11 +125,15 @@
 		userStore
 	} from "@/store/userStore";
 	import TopBar from '@/components/TopBar.vue'
+	import {
+		getUserMsg
+	} from '@/utils/global.js'
 	const {
 		proxy
 	} = getCurrentInstance()
 	const message = ref('')
 	const back = () => {
+		store.updateOperateUsername('')
 		uni.navigateBack({
 			delta: 1
 		})
@@ -167,6 +171,7 @@
 	watch(() => store.msgs[store.operateUsername], (value) => {
 		scrollBottom()
 	})
+	
 	const handleShowInfo = (type, username) => {
 		console.log(77777, type, username);
 		if (!username) {
@@ -183,10 +188,14 @@
 		})
 	}
 	const scrollBottom = () => {
+		console.log(11111);
 		toView.value = ''
-		proxy.$nextTick(() => {
-			toView.value = 'scroll-bottom'
-		})
+		setTimeout(() => {
+			proxy.$nextTick(() => {
+				toView.value = 'scroll-bottom'
+			})
+		}, 0)
+		
 	}
 	const formatDate = (value, type) => {
 		var date = new Date(Number(value));
@@ -199,7 +208,6 @@
 			minutes = "0" + minutes;
 		return hours + ":" + minutes
 	}
-	const globalFunc = inject('globalFunc')
 	const sendMessage = () => {
 		const msg = message.value
 		const client_sequence = store.userInfo.username + new Date().getTime()
@@ -226,20 +234,15 @@
 		}, {}, {
 			hideToast: true
 		}).then(res => {
-			scrollBottom()
-			// globalFunc.getUserMsg()
-			// wx.showToast({
-
-			// })
-			// if (res.code === 0) {
-			// 	globalFunc.getUserMsg()
-			// } else {
-			// 	proxy.$message({
-			// 		type: 'error',
-			// 		message: res.msg
-			// 	})
-			// }
+			getUserMsg()
 		})
+	}
+	const clickTitle = () => {
+		if (store.groupMember[store.operateUsername]) {
+			uni.navigateTo({
+				url: '/pages/console/group-info/group-info'
+			})
+		}
 	}
 </script>
 

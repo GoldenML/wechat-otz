@@ -5,7 +5,7 @@
 				:avatar-circle="false" :title="value.nickname" :avatar="value.avatar" :note="value.lastMsg" showSwitch clickable
 				link="navigateTo" @click="onClick(value.username)" badge-positon="left"
 				:badge-text="store.badges[value.username]" :showBadge="store.badges[value.username]"
-				:time="formatTime(value.lastTime)"></uni-list-chat>
+				:time="value.lastTime && formatTime(value.lastTime)"></uni-list-chat>
 
 
 			<!-- <uni-list-chat :avatar-circle="true" title="uni-app" avatar="https://qiniu-web-assets.dcloud.net.cn/unidoc/zh/unicloudlogo.png" note="您收到一条新的消息" time="2020-02-02 20:20" ></uni-list-chat> -->
